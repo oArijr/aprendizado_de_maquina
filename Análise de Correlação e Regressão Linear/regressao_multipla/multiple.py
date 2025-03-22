@@ -2,7 +2,10 @@ import numpy as np
 import scipy.io as scipy
 import sys
 import regressao_simples.regressao as reg
+import matplotlib
+matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 
 mat = scipy.loadmat('data.mat')
 data = mat['data']
@@ -59,6 +62,7 @@ datasets = {
     1: houses_size,
     2: houses_room_amount
 }
+correlacoes = []
 fig, axes = plt.subplots(1, 2, figsize=(18, 6))
 for i, ax in zip(datasets, axes):
     # Acessar os dados correspondentes a i (houses_size ou houses_room_amount)
@@ -66,6 +70,7 @@ for i, ax in zip(datasets, axes):
 
     # Calcular correlação e regressão com a função do regressor (presumindo que reg é um objeto de regressão)
     correlacao = reg.correlacao(dados_x, houses_price)
+    correlacoes.append(correlacao)
     regressao_linear = reg.regressao(dados_x, houses_price)
     b0 = reg.calcular_b0(dados_x, houses_price)
     b1 = reg.calcula_b1(dados_x, houses_price)
@@ -90,8 +95,74 @@ def multiple_regression(matrix, dependente):
 
 
 b = matrix(houses_size, houses_room_amount)
-print(b)
-print(multiple_regression(b, houses_price))
+#print(b)
+mr = multiple_regression(b, houses_price)
+print(mr)
 
 
+# e
+x = houses_size
+y = houses_room_amount
+z = houses_price
 
+# Enable interactive mode earlier in your code
+plt.ion()
+
+# Create figure and plot
+fig = plt.figure(figsize=(10, 8))
+ax = fig.add_subplot(111, projection='3d')
+
+# Plotting a 3D scatter plot
+scatter = ax.scatter(x, y, z, c='r', marker='o')
+
+# Extract coefficients from multiple regression
+b0 = mr[0]  # Intercept
+b1 = mr[1]  # Coefficient for house size
+b2 = mr[2]  # Coefficient for room amount
+
+corr_size_price = correlacoes[0]
+corr_rooms_price = correlacoes[1]
+
+min_x, max_x = min(x), max(x)
+min_y, max_y = min(y), max(y)
+x_grid, y_grid = np.meshgrid(np.linspace(min_x, max_x, 20), np.linspace(min_y, max_y, 20))
+
+# Calculate z values for the regression plane
+z_grid = b0 + b1 * x_grid + b2 * y_grid
+
+# Plot the regression plane
+surface = ax.plot_surface(x_grid, y_grid, z_grid, alpha=0.5, color='blue', label='Plano de Regressão')
+
+
+ax.set_xlabel('Tamanho da casa')
+ax.set_ylabel('Quantidade de quartos')
+ax.set_zlabel('Preço')
+
+equation = f'Preço = {b0:.2f} + {b1:.2f}×(Tamanho) + {b2:.2f}×(Quartos)'
+correlation_info = f'Correlação: Tamanho-Preço = {corr_size_price:.3f}, Quartos-Preço = {corr_rooms_price:.3f}'
+
+# Position the text on the figure
+ax.set_title(equation)
+# Add the correlation text below the plot
+ax.text2D(0.5, 0.01, correlation_info, ha='center', va='bottom', transform=ax.transAxes)
+
+# Adjust the layout
+plt.tight_layout()
+
+# Instead of just plt.show(), use:
+fig.canvas.draw_idle()
+plt.pause(0.1)  # Small pause to allow the GUI to update
+
+# Keep the plot window open until closed by the user
+plt.show(block=True)
+
+
+# h
+result =b0 + (b1 * 1650) + (b2 * 3)
+print("Tamanho de 1650m e 3 quartos :" + result)
+# Ao aumentar a quantidade de quartos o preço da casa diminui, e ao diminuir a quantidade de quartos o preço aumenta.
+# A correlação entre o preço e a quantidade de quartos é baixa, resultando em uma regressão ineficaz.
+# O coeficiente para o número de quartos (b2) na regressão múltipla é negativa.
+
+
+# No gráfico 3D, o plano de regressão mostra como o preço (Z) varia em função do tamanho da casa (X) e do número de quartos (Y)
