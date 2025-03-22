@@ -25,6 +25,8 @@ room_number = 0
 houses_size = []
 houses_room_amount = []
 houses_price = []
+
+# b)
 for x in range(total_house_number):
     house_size = data[x][0]
     room_amount = data[x][1]
@@ -44,7 +46,6 @@ for x in range(total_house_number):
 
 house_average = total_house_price / total_house_number
 
-# b)
 print(house_average)
 print(smaller_house_price)
 print(room_number)
