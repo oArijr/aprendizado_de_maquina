@@ -124,7 +124,7 @@ corr_rooms_price = correlacoes[1]
 # f)
 min_x, max_x = min(x), max(x)
 min_y, max_y = min(y), max(y)
-x_grid, y_grid = np.meshgrid(np.linspace(min_x, max_x, 20), np.linspace(min_y, max_y, 20))
+x_grid, y_grid = np.meshgrid(np.linspace(min_x, max_x), np.linspace(min_y, max_y))
 
 z_grid = b0 + b1 * x_grid + b2 * y_grid
 
@@ -145,7 +145,7 @@ ax.text2D(0.5, 0.01, correlation_info, ha='center', va='bottom', transform=ax.tr
 
 plt.tight_layout()
 
-fig.canvas.draw_idle()
+fig.canvas.draw_idle() # Redraw without freezing
 plt.pause(0.1)
 
 plt.show(block=True)

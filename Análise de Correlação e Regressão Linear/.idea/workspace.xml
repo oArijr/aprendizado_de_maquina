@@ -5,13 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fdccc25f-fa28-4c9f-aae1-bcc2380c1cf5" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/Análise de Correlação e Regressão Linear.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/regressao_multipla/rmdemo.py" beforeDir="false" afterPath="$PROJECT_DIR$/regressao_multipla/rmdemo.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/regressao_multipla/rmdemo_scikit.py" beforeDir="false" afterPath="$PROJECT_DIR$/regressao_multipla/rmdemo_scikit.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -78,7 +73,7 @@
       <workItem from="1742758001067" duration="801000" />
       <workItem from="1742856891210" duration="23000" />
       <workItem from="1742939398605" duration="2218000" />
-      <workItem from="1743024711754" duration="4898000" />
+      <workItem from="1743024711754" duration="7029000" />
     </task>
     <servers />
   </component>
@@ -89,6 +84,6 @@
     <SUITE FILE_PATH="coverage/Análise_de_Correlação_e_Regressão_Linear$multiple.coverage" NAME="multiple Coverage Results" MODIFIED="1742666026558" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/regressao_multipla" />
     <SUITE FILE_PATH="coverage/Análise_de_Correlação_e_Regressão_Linear$demo.coverage" NAME="demo Coverage Results" MODIFIED="1742046240172" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Análise_de_Correlação_e_Regressão_Linear$rmdemo_scikit.coverage" NAME="rmdemo_scikit Coverage Results" MODIFIED="1743029367287" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/regressao_multipla" />
-    <SUITE FILE_PATH="coverage/Análise_de_Correlação_e_Regressão_Linear$rmdemo.coverage" NAME="rmdemo Coverage Results" MODIFIED="1743029479500" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/regressao_multipla" />
+    <SUITE FILE_PATH="coverage/Análise_de_Correlação_e_Regressão_Linear$rmdemo.coverage" NAME="rmdemo Coverage Results" MODIFIED="1743031789564" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/regressao_multipla" />
   </component>
 </project>
