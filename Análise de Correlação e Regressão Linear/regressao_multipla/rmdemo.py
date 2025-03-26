@@ -5,7 +5,6 @@ import regressao_simples.regressao as reg
 import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
 
 # a)
 mat = scipy.loadmat('data.mat')
@@ -51,24 +50,23 @@ print(smaller_house_price)
 print(room_number)
 
 
-independent_variables_matrix = [[houses_size[i], houses_room_amount[i]] for i in range(len(houses_size))]
-
 # c)
+independent_variables_matrix = [[houses_size[i], houses_room_amount[i]] for i in range(len(houses_size))]
 print("\nMatriz de variáveis independentes (tamanho da casa e número de quartos):")
 for i in range(len(independent_variables_matrix)):
-    print(f"{independent_variables_matrix[i][0]:<20} | {independent_variables_matrix[i][1]:<18}")
+    print(f"{independent_variables_matrix[i][0]:<18} | {independent_variables_matrix[i][1]:<18}")
 
 
 # d)
-datasets = {
+house_datasets = {
     1: houses_size,
     2: houses_room_amount
 }
 correlacoes = []
 fig, axes = plt.subplots(1, 2, figsize=(18, 6))
-for i, ax in zip(datasets, axes):
+for i, ax in zip(house_datasets, axes):
     # Acessar os dados correspondentes a i (houses_size ou houses_room_amount)
-    dados_x = datasets[i]
+    dados_x = house_datasets[i]
 
     correlacao = reg.correlacao(dados_x, houses_price)
     correlacoes.append(correlacao)
@@ -89,13 +87,18 @@ for i, ax in zip(datasets, axes):
 def matrix(list1, list2):
     return [[1, list1[i], list2[i]] for i in range(len(list1))]
 
-def multiple_regression(matrix, dependente):
+def beta(matrix, dependente):
     matrix_transpose = np.matrix_transpose(matrix)
     return (np.linalg.inv(matrix_transpose @ matrix)) @ matrix_transpose @ dependente
 
 
-b = matrix(houses_size, houses_room_amount)
-mr = multiple_regression(b, houses_price)
+def multiple_regression():
+    return X * mr
+
+
+X = matrix(houses_size, houses_room_amount)
+mr = beta(X, houses_price)
+multiple_regression = multiple_regression()
 print(mr)
 
 
@@ -112,8 +115,8 @@ ax = fig.add_subplot(111, projection='3d')
 scatter = ax.scatter(x, y, z, c='r', marker='o')
 
 b0 = mr[0]
-b1 = mr[1]  # Coefficient for house size
-b2 = mr[2]  # Coefficient for room amount
+b1 = mr[1] # Coefficient for 'Tamanho'
+b2 = mr[2] # Coefficient for 'Quartos'
 
 corr_size_price = correlacoes[0]
 corr_rooms_price = correlacoes[1]
@@ -125,7 +128,7 @@ x_grid, y_grid = np.meshgrid(np.linspace(min_x, max_x, 20), np.linspace(min_y, m
 
 z_grid = b0 + b1 * x_grid + b2 * y_grid
 
-surface = ax.plot_surface(x_grid, y_grid, z_grid, alpha=0.5, color='blue', label='Plano de Regressão')
+ax.plot_surface(x_grid, y_grid, z_grid, alpha=0.5, color='blue', label='Plano de Regressão')
 
 
 ax.set_xlabel('Tamanho da casa')

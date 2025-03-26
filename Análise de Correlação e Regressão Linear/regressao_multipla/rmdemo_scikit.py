@@ -11,7 +11,7 @@ tamanho = [casa[0] for casa in data]
 quartos = [casa[1] for casa in data]
 precos = [casa[2] for casa in data]
 
-x = np.column_stack((tamanho, quartos)) # Empilha arrays unidimensionais como colunas de uma matriz 2D,
+x = np.column_stack((tamanho, quartos))
 modelo = LinearRegression().fit(x, precos)
 b0, b1, b2 = modelo.intercept_, modelo.coef_[0], modelo.coef_[1]
 
