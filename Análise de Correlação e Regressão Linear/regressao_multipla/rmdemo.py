@@ -65,7 +65,6 @@ house_datasets = {
 correlacoes = []
 fig, axes = plt.subplots(1, 2, figsize=(18, 6))
 for i, ax in zip(house_datasets, axes):
-    # Acessar os dados correspondentes a i (houses_size ou houses_room_amount)
     dados_x = house_datasets[i]
 
     correlacao = reg.correlacao(dados_x, houses_price)
@@ -115,8 +114,8 @@ ax = fig.add_subplot(111, projection='3d')
 scatter = ax.scatter(x, y, z, c='r', marker='o')
 
 b0 = mr[0]
-b1 = mr[1] # Coefficient for 'Tamanho'
-b2 = mr[2] # Coefficient for 'Quartos'
+b1 = mr[1]
+b2 = mr[2]
 
 corr_size_price = correlacoes[0]
 corr_rooms_price = correlacoes[1]
@@ -145,7 +144,7 @@ ax.text2D(0.5, 0.01, correlation_info, ha='center', va='bottom', transform=ax.tr
 
 plt.tight_layout()
 
-fig.canvas.draw_idle() # Redraw without freezing
+fig.canvas.draw_idle()
 plt.pause(0.1)
 
 plt.show(block=True)

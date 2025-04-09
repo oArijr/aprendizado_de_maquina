@@ -2,6 +2,7 @@ import scipy.io as scipy
 import matplotlib.pyplot as plt
 import numpy as np
 
+# Ari Elias da Silva Júnior e Luigi Garcia Marchetti
 def regressao_polinomial(x, y, n):
     lista_beta = np.flip(np.polyfit(x, y, n))
     x = np.array(x)
@@ -41,6 +42,7 @@ ax.plot(x , list_n3, c='y')
 
 plt.show()
 
+#G)
 
 
 
