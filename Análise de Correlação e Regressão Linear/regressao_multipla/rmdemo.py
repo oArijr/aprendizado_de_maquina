@@ -65,7 +65,7 @@ house_datasets = {
 correlacoes = []
 fig, axes = plt.subplots(1, 2, figsize=(18, 6))
 for i, ax in zip(house_datasets, axes):
-    # Acessar os dados correspondentes a i (houses_size ou houses_room_amount)
+    # Access data corresponded to i (houses_size ou houses_room_amount)
     dados_x = house_datasets[i]
 
     correlacao = reg.correlacao(dados_x, houses_price)
