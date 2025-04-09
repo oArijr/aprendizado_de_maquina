@@ -1,6 +1,7 @@
 import scipy.io as scipy
 import matplotlib.pyplot as plt
 import numpy as np
+import random
 
 def regressao_polinomial(x, y, n):
     lista_beta = np.flip(np.polyfit(x, y, n))
@@ -41,16 +42,29 @@ ax.plot(x , list_n3, c='y')
 
 plt.show()
 
+#G)
+media_y = np.mean(y)
 
+def residuo(y, media_y):
+    return np.pow(y - media_y, 2)
 
+soma_residuos = 0
+for i in y:
+    soma_residuos += residuo(i, media_y)
 
+y_tam = len(y)
 
+eqm = soma_residuos / y_tam
+print(eqm)
 
+#H)
+x_y = list(zip(x, y))
+test_set = random.sample(x_y, int(len(x_y) * 0.1))
+print(test_set)
 
-
-
-
-
+treino_set = [item for item in x_y if item not in test_set]
+x_train, y_train = zip(*treino_set)
+x_test, y_test = zip(*test_set)
 
 
 

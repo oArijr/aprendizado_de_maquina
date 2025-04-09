@@ -70,6 +70,7 @@ for i, ax in zip(house_datasets, axes):
 
     correlacao = reg.correlacao(dados_x, houses_price)
     correlacoes.append(correlacao)
+
     regressao_linear = reg.regressao(dados_x, houses_price)
     b0 = reg.calcular_b0(dados_x, houses_price)
     b1 = reg.calcula_b1(dados_x, houses_price)
