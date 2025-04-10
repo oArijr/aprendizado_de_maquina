@@ -2,6 +2,7 @@ import scipy.io as scipy
 import matplotlib.pyplot as plt
 import numpy as np
 import random
+from sklearn.metrics import r2_score
 
 # Ari Elias da Silva Júnior e Luigi Garcia Marchetti
 def regressao_polinomial(x, y, n):
@@ -42,7 +43,18 @@ ax.plot(x , list_n3, c='black')
 list_n4 = regressao_polinomial(x, y, 8)
 ax.plot(x , list_n4, c='y')
 
+plt.show()
+
 #G)
+lists = {
+    1: list_n1,
+    2: list_n2,
+    3: list_n3,
+    4: list_n4,
+}
+
+media_y = np.mean(y)
+
 def residuo(y, media_y):
     return np.pow(y - media_y, 2)
 
@@ -88,9 +100,16 @@ list_n4 = regressao_polinomial(x_train, y_train, 8)
 ax.plot(x_train , list_n4, c='y')
 
 plt.show()
+#K)
+# R² no conjunto de treinamento
+r2_train = r2_score(y_train, y_pred_train)
+print("R² (treinamento):", r2_train)
+
 
 #J)
 eqm_test = erro_quadratico_medio(y_test)
 print(eqm_test)
 
-
+# R² no conjunto de teste
+r2_test = r2_score(y_test, y_pred_test)
+print("R² (teste):", r2_test)
