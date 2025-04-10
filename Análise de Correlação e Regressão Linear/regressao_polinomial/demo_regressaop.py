@@ -22,6 +22,7 @@ y = [coluna[1] for coluna in data]
 # B)
 fig = plt.figure(figsize=(10,8))
 ax = fig.add_subplot()
+ax.set_title("Normal")
 ax.scatter(x, y)
 
 
@@ -38,24 +39,25 @@ list_n3 = regressao_polinomial(x, y, 3)
 ax.plot(x , list_n3, c='black')
 
 #F)
-list_n3 = regressao_polinomial(x, y, 8)
-ax.plot(x , list_n3, c='y')
-
-plt.show()
+list_n4 = regressao_polinomial(x, y, 8)
+ax.plot(x , list_n4, c='y')
 
 #G)
-media_y = np.mean(y)
-
 def residuo(y, media_y):
     return np.pow(y - media_y, 2)
 
-soma_residuos = 0
-for i in y:
-    soma_residuos += residuo(i, media_y)
+def erro_quadratico_medio(y):
+    media_y = np.mean(y)
 
-y_tam = len(y)
+    soma_residuos = 0
+    for i in y:
+        soma_residuos += residuo(i, media_y)
 
-eqm = soma_residuos / y_tam
+    y_tam = len(y)
+
+    return soma_residuos / y_tam
+
+eqm = erro_quadratico_medio(y)
 print(eqm)
 
 #H)
@@ -67,6 +69,28 @@ treino_set = [item for item in x_y if item not in test_set]
 x_train, y_train = zip(*treino_set)
 x_test, y_test = zip(*test_set)
 
+#I)
+fig2 = plt.figure(figsize=(10,8))
+ax = fig2.add_subplot()
+ax.set_title("Treino")
+ax.scatter(x_train, y_train)
 
+list_n1 = regressao_polinomial(x_train, y_train, 1)
+ax.plot(x_train , list_n1, c='r')
+
+list_n2 = regressao_polinomial(x_train, y_train, 2)
+ax.plot(x_train , list_n2, c='g')
+
+list_n3 = regressao_polinomial(x_train, y_train, 3)
+ax.plot(x_train , list_n3, c='black')
+
+list_n4 = regressao_polinomial(x_train, y_train, 8)
+ax.plot(x_train , list_n4, c='y')
+
+plt.show()
+
+#J)
+eqm_test = erro_quadratico_medio(y_test)
+print(eqm_test)
 
 
