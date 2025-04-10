@@ -2,6 +2,7 @@ import scipy.io as scipy
 import matplotlib.pyplot as plt
 import numpy as np
 import random
+from sklearn.metrics import r2_score
 
 def regressao_polinomial(x, y, n):
     lista_beta = np.flip(np.polyfit(x, y, n))
@@ -37,12 +38,19 @@ list_n3 = regressao_polinomial(x, y, 3)
 ax.plot(x , list_n3, c='black')
 
 #F)
-list_n3 = regressao_polinomial(x, y, 8)
-ax.plot(x , list_n3, c='y')
+list_n4 = regressao_polinomial(x, y, 8)
+ax.plot(x , list_n4, c='y')
 
 plt.show()
 
 #G)
+lists = {
+    1: list_n1,
+    2: list_n2,
+    3: list_n3,
+    4: list_n4,
+}
+
 media_y = np.mean(y)
 
 def residuo(y, media_y):
@@ -67,5 +75,11 @@ x_train, y_train = zip(*treino_set)
 x_test, y_test = zip(*test_set)
 
 
+#K)
+# R² no conjunto de treinamento
+r2_train = r2_score(y_train, y_pred_train)
+print("R² (treinamento):", r2_train)
 
-
+# R² no conjunto de teste
+r2_test = r2_score(y_test, y_pred_test)
+print("R² (teste):", r2_test)
