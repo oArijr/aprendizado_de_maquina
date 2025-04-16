@@ -26,7 +26,6 @@ ax = fig.add_subplot()
 ax.set_title("Normal")
 ax.scatter(x, y)
 
-
 #C)
 list_n1 = regressao_polinomial(x, y, 1)
 ax.plot(x , list_n1, c='r')
@@ -58,25 +57,28 @@ def erro_quadratico_medio(y_linear, y):
 
     y_tam = len(y_linear)
 
-    return soma_residuos / y_tam
+    res = soma_residuos / y_tam
+    return res
 
 print("\nEQM 1")
-print(round(erro_quadratico_medio(list_n1, y), 5))
+print(erro_quadratico_medio(list_n1, y))
 
 print("EQM 2")
-print(round(erro_quadratico_medio(list_n2, y), 5))
+print(erro_quadratico_medio(list_n2, y))
 
 print("EQM 3")
-print(round(erro_quadratico_medio(list_n3, y), 5))
+print(erro_quadratico_medio(list_n3, y))
 
 print("EQM 8")
-print(round(erro_quadratico_medio(list_n8, y), 5))
+print(erro_quadratico_medio(list_n8, y))
 print()
 
 #H)
 x_y = list(zip(x, y))
 test_set = random.sample(x_y, int(len(x_y) * 0.1))
-print(test_set)
+print("Test Set:")
+for pair in test_set:
+    print(f"({pair[0]}, {pair[1]})")
 
 treino_set = [item for item in x_y if item not in test_set]
 x_train, y_train = zip(*treino_set)
@@ -104,23 +106,24 @@ plt.show()
 
 #J)
 # Obter os coeficientes dos modelos treinados
-coef_n1 = np.polyfit(x_train, y_train, 1)
-coef_n2 = np.polyfit(x_train, y_train, 2)
-coef_n3 = np.polyfit(x_train, y_train, 3)
-coef_n8 = np.polyfit(x_train, y_train, 8)
+coef_n1_test = regressao_polinomial(x_test, y_test, 1)
+ax.plot(x_train , list_n1, c='r')
 
-# Calcular predições nos dados de teste
-test_n1 = np.polyval(coef_n1, x_test)
-test_n2 = np.polyval(coef_n2, x_test)
-test_n3 = np.polyval(coef_n3, x_test)
-test_n8 = np.polyval(coef_n8, x_test)
+coef_n2_test = regressao_polinomial(x_test, y_test, 2)
+ax.plot(x_train , list_n2, c='g')
+
+coef_n3_test = regressao_polinomial(x_test, y_test, 3)
+ax.plot(x_train , list_n3, c='black')
+
+coef_n8_test = regressao_polinomial(x_test, y_test, 8)
+ax.plot(x_train, list_n8, c='y')
 
 # Calculando EQM para dados de teste
 print("\nEQM nos dados de TESTE:")
-print("EQM 1:", round(erro_quadratico_medio(test_n1, y_test), 5))
-print("EQM 2:", round(erro_quadratico_medio(test_n2, y_test), 5))
-print("EQM 3:", round(erro_quadratico_medio(test_n3, y_test), 5))
-print("EQM 8:", round(erro_quadratico_medio(test_n8, y_test), 5))
+print("EQM 1:", erro_quadratico_medio(coef_n1_test, y_test))
+print("EQM 2:", erro_quadratico_medio(coef_n2_test, y_test))
+print("EQM 3:", erro_quadratico_medio(coef_n3_test, y_test))
+print("EQM 8:", erro_quadratico_medio(coef_n8_test, y_test))
 
 #K)
 # Calculando R2 para os dados de treino
@@ -130,37 +133,23 @@ r2_train_n3 = r2_score(y_train, list_n3)
 r2_train_n8 = r2_score(y_train, list_n8)
 
 print("\nR2 nos dados de TREINO:")
-print("R2 N=1:", round(r2_train_n1, 5))
-print("R2 N=2:", round(r2_train_n2, 5))
-print("R2 N=3:", round(r2_train_n3, 5))
-print("R2 N=8:", round(r2_train_n8, 5))
+print("R2 N=1:", r2_train_n1)
+print("R2 N=2:", r2_train_n2)
+print("R2 N=3:", r2_train_n3)
+print("R2 N=8:", r2_train_n8)
 
 # Calculando R2 para os dados de teste
-r2_test_n1 = r2_score(y_test, test_n1)
-r2_test_n2 = r2_score(y_test, test_n2)
-r2_test_n3 = r2_score(y_test, test_n3)
-r2_test_n8 = r2_score(y_test, test_n8)
+r2_test_n1 = r2_score(y_test, coef_n1_test)
+r2_test_n2 = r2_score(y_test, coef_n2_test)
+r2_test_n3 = r2_score(y_test, coef_n3_test)
+r2_test_n8 = r2_score(y_test, coef_n8_test)
 
 print("\nR2 nos dados de TESTE:")
-print("R2 N=1:", round(r2_test_n1, 5))
-print("R2 N=2:", round(r2_test_n2, 5))
-print("R2 N=3:", round(r2_test_n3, 5))
-print("R2 N=8:", round(r2_test_n8, 5))
+print("R2 N=1:", r2_test_n1)
+print("R2 N=2:", r2_test_n2)
+print("R2 N=3:", r2_test_n3)
+print("R2 N=8:", r2_test_n8)
 
 
-
-
-degrees = [1, 2, 3, 8]
-r2_train = [r2_train_n1, r2_train_n2, r2_train_n3, r2_train_n8]
-r2_test = [r2_test_n1, r2_test_n2, r2_test_n3, r2_test_n8]
-
-fig4 = plt.figure(figsize=(10, 6))
-ax = fig4.add_subplot()
-ax.plot(degrees, r2_train, 'o-', label='R2 Treino')
-ax.plot(degrees, r2_test, 's-', label='R2 Teste')
-ax.set_xlabel('Grau do Polinômio (N)')
-ax.set_ylabel('R2')
-ax.set_title('Comparação de R2 entre dados de treino e teste')
-ax.legend()
-plt.grid(True)
-plt.show()
+# O modelo N8 em geral. Em alguns cenários de testes, devido principalmente a serem poucos casos, isso pode variar,
+# com o N3 por exemplo desempenhando melhor
