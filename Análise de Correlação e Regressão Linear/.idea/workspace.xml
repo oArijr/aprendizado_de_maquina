@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="69cb15f5-a949-4e61-8b8b-ff2bf8f51d36" name="Changes" comment="top">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/regressao_polinomial/demo_regressaop.py" beforeDir="false" afterPath="$PROJECT_DIR$/regressao_polinomial/demo_regressaop.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,7 +31,7 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/user/OneDrive - FURB/Machine Learning/Análise de Correlação e Regressão Linear",
+    "last_opened_file_path": "C:/Users/luigi/OneDrive - FURB/Machine Learning",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -67,7 +66,7 @@
       <updated>1744563530570</updated>
       <workItem from="1744563531642" duration="297000" />
       <workItem from="1744575448858" duration="3157000" />
-      <workItem from="1744839307607" duration="7429000" />
+      <workItem from="1744839307607" duration="7880000" />
     </task>
     <option name="localTasksCounter" value="2" />
     <servers />
