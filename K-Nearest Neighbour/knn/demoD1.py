@@ -1,5 +1,5 @@
 import scipy.io as scipy
-import Utils.meuKnn as meuKnn
+import Utils
 
 
 
@@ -10,10 +10,11 @@ grupoTest = mat['grupoTest']
 grupoTrain = mat['grupoTrain']
 testRots = mat['testRots']
 trainRots = mat['trainRots']
-print(grupoTest)
-print(grupoTrain)
-print(testRots)
-print(trainRots)
 
+print("Para k=1")
+accuracy = Utils.accuracy(grupoTrain, trainRots, grupoTest, testRots, 1)
+print(f"Acurácia: {accuracy}\n")
 
-meuKnn(grupoTrain, testRots, grupoTest, 3)
+print("Para k=10")
+accuracy = Utils.accuracy(grupoTrain, trainRots, grupoTest, testRots, 10)
+print(f"Acurácia: {accuracy}\n")

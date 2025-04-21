@@ -1,7 +1,7 @@
 import math
 import numpy as np
 from scipy import stats
-
+import matplotlib.pyplot as plt
 
 def dist(vetor_p, vetor_q):
     total = 0
@@ -10,18 +10,67 @@ def dist(vetor_p, vetor_q):
     return math.sqrt(total)
 
 
-def meuKnn(dadosTrain, rotuloTrain, dadosTeste, k):
-    for i in dadosTeste:
-        distancias = []
-        for j in dadosTrain:
+def meu_knn(dadosTrain, rotuloTrain, dadosTeste, k):
+    rotulos_previstos = []
+
+    for i in range(len(dadosTeste)):
+        distancias = {}
+        for j in range(len(dadosTrain)):
             # % Calcule a distância entre o exemplo de teste e os dados de treinamento
-            distancias.append(dist(dadosTrain[j], dadosTeste[i]))
+            distancias[j] = dist(dadosTrain[j], dadosTeste[i])
 
-        distOrdenada = sorted(distancias)
+        dist_ordenada = dict(sorted(distancias.items(), key=lambda item: item[1]))
 
-        mais_proximos = distOrdenada[:k]
+        mais_proximos = list(dist_ordenada.keys())[:k]
+        mais_proximos_rotulados = [rotuloTrain[mp][0] for mp in mais_proximos]
 
-        moda = stats.mode(mais_proximos)
-        res = moda.mode[0]
-        print(f"Moda teste {i}: ", res)
-        print(f"Rótulo teste {i}: ", rotuloTrain[i])
+        moda = stats.mode(mais_proximos_rotulados)
+        rotulo_previsto = moda.mode
+        #print(f"Moda teste {i}: ", rotulo_previsto)
+        rotulos_previstos.append(rotulo_previsto)
+    return rotulos_previstos
+
+
+def accuracy(dados_train, rotulos_train, dados_teste, rotulos_teste, k):
+    rotulos_previstos = meu_knn(dados_train, rotulos_train, dados_teste, k)
+
+    estaCorreto = [rotulos_teste[i][0] == rot_prev for i, rot_prev in enumerate(rotulos_previstos)]
+
+    numCorreto = sum(estaCorreto);
+
+    totalNum = len(rotulos_previstos);
+
+    res = (numCorreto / totalNum) * 100
+    return f"{res:.0f}%"
+
+
+
+def getDadosRotulo(dados, rotulos, rotulo, indice):
+    ret = []
+
+    for idx in range(0, len(dados)):
+        if(rotulos[idx] == rotulo):
+            ret.append(dados[idx][indice])
+
+    return ret
+
+
+
+def visualizaPontos(dados, rotulos, d1, d2):
+    fig, ax = plt.subplots()
+
+    ax.scatter(getDadosRotulo(dados, rotulos, 1, d1), getDadosRotulo(dados, rotulos, 1, d2), c='red' , marker='^')
+
+    ax.scatter(getDadosRotulo(dados, rotulos, 2, d1), getDadosRotulo(dados, rotulos, 2, d2), c='blue' , marker='+')
+
+    ax.scatter(getDadosRotulo(dados, rotulos, 3, d1), getDadosRotulo(dados, rotulos, 3, d2), c='green', marker='.'
+
+    plt.show()
+
+
+
+
+
+
+
+
