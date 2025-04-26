@@ -40,8 +40,7 @@ def accuracy(dados_train, rotulos_train, dados_teste, rotulos_teste, k):
 
     totalNum = len(rotulos_previstos);
 
-    res = (numCorreto / totalNum) * 100
-    return f"{res:.0f}%"
+    return (numCorreto / totalNum) * 100
 
 
 
@@ -63,9 +62,20 @@ def visualizaPontos(dados, rotulos, d1, d2):
 
     ax.scatter(getDadosRotulo(dados, rotulos, 2, d1), getDadosRotulo(dados, rotulos, 2, d2), c='blue' , marker='+')
 
-    ax.scatter(getDadosRotulo(dados, rotulos, 3, d1), getDadosRotulo(dados, rotulos, 3, d2), c='green', marker='.'
+    ax.scatter(getDadosRotulo(dados, rotulos, 3, d1), getDadosRotulo(dados, rotulos, 3, d2), c='green', marker='.')
 
     plt.show()
+
+def acuracia_maxima(dados_train, rotulos_train, dados_teste, rotulos_teste):
+    acuracia_maxima = 0
+    k = 0
+    for i in range(50):
+        acuracia_atual = accuracy(dados_train, rotulos_train, dados_teste, rotulos_teste, i)
+        if acuracia_maxima < acuracia_atual:
+            acuracia_maxima = acuracia_atual
+            k = i
+
+    return acuracia_maxima, k
 
 
 
