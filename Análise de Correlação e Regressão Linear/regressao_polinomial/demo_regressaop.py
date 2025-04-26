@@ -5,12 +5,12 @@ import random
 from sklearn.metrics import r2_score
 
 # Ari Elias da Silva Júnior e Luigi Garcia Marchetti
-def regressao_polinomial(x, y, n):
+def regressao_polinomial(x, y, x_regression, n):
     lista_beta = np.flip(np.polyfit(x, y, n))
-    x = np.array(x)
-    r = lista_beta[0] + lista_beta[1] * x
+    x_regression = np.array(x_regression)
+    r = lista_beta[0] + lista_beta[1] * x_regression
     for i in range(2, len(lista_beta)):
-        r += lista_beta[i] * (x ** i)
+        r += lista_beta[i] * (x_regression ** i)
     return r
 
 # A)
@@ -27,32 +27,32 @@ ax.set_title("Normal")
 ax.scatter(x, y)
 
 #C)
-list_n1_train = regressao_polinomial(x, y, 1)
-ax.plot(x, list_n1_train, c='r')
+list_n1 = regressao_polinomial(x, y, 1)
+ax.plot(x, list_n1, c='r')
 
 #D)
-list_n2_train = regressao_polinomial(x, y, 2)
-ax.plot(x, list_n2_train, c='g')
+list_n2 = regressao_polinomial(x, y, 2)
+ax.plot(x, list_n2, c='g')
 
 #E)
-list_n3_train = regressao_polinomial(x, y, 3)
-ax.plot(x, list_n3_train, c='black')
+list_n3 = regressao_polinomial(x, y, 3)
+ax.plot(x, list_n3, c='black')
 
 #F)
-list_n8_train = regressao_polinomial(x, y, 8)
-ax.plot(x, list_n8_train, c='y')
+list_n8 = regressao_polinomial(x, y, 8)
+ax.plot(x, list_n8, c='y')
 
 plt.show()
 
 #G)
 media_y = np.mean(y)
 
-def residuo(y, media_y):
-    return np.pow(y - media_y, 2)
+def residuo(y_real, y_estimado):
+    return np.pow(y_real - y_estimado, 2)
 
 def erro_quadratico_medio(y_linear, y):
     soma_residuos = 0
-    for i, j in zip(y_linear, y):
+    for i, j in zip(y, y_linear):
         soma_residuos += residuo(i, j)
 
     y_tam = len(y_linear)
@@ -60,16 +60,16 @@ def erro_quadratico_medio(y_linear, y):
     return soma_residuos / y_tam
 
 print("\nEQM 1")
-print(round(erro_quadratico_medio(list_n1_train, y), 5))
+print(round(erro_quadratico_medio(list_n1, y), 5))
 
 print("EQM 2")
-print(round(erro_quadratico_medio(list_n2_train, y), 5))
+print(round(erro_quadratico_medio(list_n2, y), 5))
 
 print("EQM 3")
-print(round(erro_quadratico_medio(list_n3_train, y), 5))
+print(round(erro_quadratico_medio(list_n3, y), 5))
 
 print("EQM 8")
-print(round(erro_quadratico_medio(list_n8_train, y), 5))
+print(round(erro_quadratico_medio(list_n8, y), 5))
 print()
 
 #H)
