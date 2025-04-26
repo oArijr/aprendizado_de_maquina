@@ -1,0 +1,16 @@
+# Ignorar a pasta .idea
+.idea/
+
+# Ignorar ambientes virtuais do Python
+venv/
+.venv/
+ENV/
+env/
+
+# Ignorar arquivos de cache do Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Ignorar arquivos de configuração pessoais
+*.env
