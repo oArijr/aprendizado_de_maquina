@@ -36,12 +36,12 @@ for i in range(4):
 combinacoes_duplas = [[0, 1],[0, 2],[0, 3],[1, 2],[1, 3],[2, 3]]
 
 for i in range(len(combinacoes_duplas)):
-    grupoTrain_coluna = np.delete(grupoTrain, combinacoes_duplas[i], 1)
-    grupoTest_coluna = np.delete(grupoTest, combinacoes_duplas[i], 1)
+    grupoTrain_coluna = grupoTrain[:, combinacoes_duplas[i]]
+    grupoTest_coluna = grupoTest[:, combinacoes_duplas[i]]
 
     acuracia_maxima, k = Utils.acuracia_maxima(grupoTrain_coluna, trainRots, grupoTest_coluna, testRots)
 
-    print(f"\nRemovendo colunas: {combinacoes_duplas[i]} \n Maior acurácia: {acuracia_maxima}; K = {k}")
+    print(f"\nMantendo as colunas: {combinacoes_duplas[i]} \n Maior acurácia: {acuracia_maxima}; K = {k}")
 
 
 for i in range(4):
@@ -52,9 +52,9 @@ for i in range(4):
 
     print(f"\nMantendo apenas a coluna: {i} \n Maior acurácia: {acuracia_maxima}; K = {k}")
 
-
 # Não, com duas colunas já é possível alcançar 98% de acurácia.
-#   Com as combinações de colunas (2 "Comprimento da pétala" e 3 "Largura da pétala" e K = 4)
+#Com as combinações de colunas (2 "Comprimento da pétala" e 3 "Largura da pétala" e K = 4)
 # e (0 "Comprimento da sépala" e 2 "Comprimento da pétala" e K = 3).
-#   Vale ressaltar que chegamos a atingir 96% de acurácia
+
+#  Vale ressaltar que chegamos a atingir 96% de acurácia
 # utilizando apenas a coluna 2 (K = 5) e utilizando apenas a coluna 3 (K = 4).
