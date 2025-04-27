@@ -16,7 +16,6 @@ def meu_knn(dadosTrain, rotuloTrain, dadosTeste, k):
     for i in range(len(dadosTeste)):
         distancias = {}
         for j in range(len(dadosTrain)):
-            # % Calcule a distância entre o exemplo de teste e os dados de treinamento
             distancias[j] = dist(dadosTrain[j], dadosTeste[i])
 
         dist_ordenada = dict(sorted(distancias.items(), key=lambda item: item[1]))
@@ -26,7 +25,6 @@ def meu_knn(dadosTrain, rotuloTrain, dadosTeste, k):
 
         moda = stats.mode(mais_proximos_rotulados)
         rotulo_previsto = moda.mode
-        #print(f"Moda teste {i}: ", rotulo_previsto)
         rotulos_previstos.append(rotulo_previsto)
     return rotulos_previstos
 
@@ -36,9 +34,9 @@ def accuracy(dados_train, rotulos_train, dados_teste, rotulos_teste, k):
 
     estaCorreto = [rotulos_teste[i][0] == rot_prev for i, rot_prev in enumerate(rotulos_previstos)]
 
-    numCorreto = sum(estaCorreto);
+    numCorreto = sum(estaCorreto)
 
-    totalNum = len(rotulos_previstos);
+    totalNum = len(rotulos_previstos)
 
     return (numCorreto / totalNum) * 100
 
@@ -46,7 +44,6 @@ def accuracy(dados_train, rotulos_train, dados_teste, rotulos_teste, k):
 
 def getDadosRotulo(dados, rotulos, rotulo, indice):
     ret = []
-
     for idx in range(0, len(dados)):
         if(rotulos[idx] == rotulo):
             ret.append(dados[idx][indice])
@@ -69,7 +66,7 @@ def visualizaPontos(dados, rotulos, d1, d2):
 def acuracia_maxima(dados_train, rotulos_train, dados_teste, rotulos_teste):
     acuracia_maxima = 0
     k = 0
-    for i in range(50):
+    for i in range(1, 50):
         acuracia_atual = accuracy(dados_train, rotulos_train, dados_teste, rotulos_teste, i)
         if acuracia_maxima < acuracia_atual:
             acuracia_maxima = acuracia_atual
