@@ -2,6 +2,8 @@ import math
 import numpy as np
 from scipy import stats
 import matplotlib.pyplot as plt
+from collections import Counter
+
 
 def dist(vetor_p, vetor_q):
     total = 0
@@ -16,6 +18,7 @@ def meu_knn(dadosTrain, rotuloTrain, dadosTeste, k):
     for i in range(len(dadosTeste)):
         distancias = {}
         for j in range(len(dadosTrain)):
+            # % Calcule a distância entre o exemplo de teste e os dados de treinamento
             distancias[j] = dist(dadosTrain[j], dadosTeste[i])
 
         dist_ordenada = dict(sorted(distancias.items(), key=lambda item: item[1]))
@@ -25,6 +28,15 @@ def meu_knn(dadosTrain, rotuloTrain, dadosTeste, k):
 
         moda = stats.mode(mais_proximos_rotulados)
         rotulo_previsto = moda.mode
+
+        if k % 2 == 0:
+            if verificar_empate(mais_proximos_rotulados):
+                mais_proximos = list(dist_ordenada.keys())[:k-1]
+                mais_proximos_rotulados = [rotuloTrain[mp][0] for mp in mais_proximos]
+                moda = stats.mode(mais_proximos_rotulados)
+                rotulo_previsto = moda.mode
+
+        # print(f"Moda teste {i}: ", rotulo_previsto)
         rotulos_previstos.append(rotulo_previsto)
     return rotulos_previstos
 
@@ -44,8 +56,9 @@ def accuracy(dados_train, rotulos_train, dados_teste, rotulos_teste, k):
 
 def getDadosRotulo(dados, rotulos, rotulo, indice):
     ret = []
+
     for idx in range(0, len(dados)):
-        if(rotulos[idx] == rotulo):
+        if (rotulos[idx] == rotulo):
             ret.append(dados[idx][indice])
 
     return ret
@@ -55,13 +68,39 @@ def getDadosRotulo(dados, rotulos, rotulo, indice):
 def visualizaPontos(dados, rotulos, d1, d2):
     fig, ax = plt.subplots()
 
-    ax.scatter(getDadosRotulo(dados, rotulos, 1, d1), getDadosRotulo(dados, rotulos, 1, d2), c='red' , marker='^')
+    cores = [
+        'red', 'blue', 'green', 'orange', 'purple',
+        'cyan', 'magenta', 'yellow', 'black', 'brown',
+        'pink', 'gray', 'lime'
+    ]
 
-    ax.scatter(getDadosRotulo(dados, rotulos, 2, d1), getDadosRotulo(dados, rotulos, 2, d2), c='blue' , marker='+')
+    markers = [
+        '^', '+', '.', 'o', 's',
+        'p', '*', 'h', 'D', 'v',
+        '>', '<', 'x'
+    ]
 
-    ax.scatter(getDadosRotulo(dados, rotulos, 3, d1), getDadosRotulo(dados, rotulos, 3, d2), c='green', marker='.')
+    for i in range(1, len(set([valor[0] for valor in rotulos])) + 1):
+        ax.scatter(getDadosRotulo(dados, rotulos, i, d1), getDadosRotulo(dados, rotulos, i, d2), c=cores[i],
+                   marker=markers[i])
 
     plt.show()
+
+def normalizacao(dados):
+    novos_dados = []
+    for i in range(len(dados)):
+        linha_nova = []
+        for j in range(len(dados[i])):
+            valor_atual = dados[i][j]
+            max_value = np.max(dados[:, j])
+            min_value = np.min(dados[:, j])
+            res = (valor_atual - min_value) / (max_value - min_value)
+
+            linha_nova.append(res)
+        novos_dados.append(linha_nova)
+
+    return novos_dados
+
 
 def acuracia_maxima(dados_train, rotulos_train, dados_teste, rotulos_teste):
     acuracia_maxima = 0
@@ -77,7 +116,12 @@ def acuracia_maxima(dados_train, rotulos_train, dados_teste, rotulos_teste):
 
 
 
+def verificar_empate(vizinhos_rotulados):
+    contador = Counter(vizinhos_rotulados)
+    max_contagem = max(contador.values())
+    classes_empatadas = [classe for classe, cont in contador.items() if cont == max_contagem]
 
-
-
-
+    if len(classes_empatadas) > 1:
+        return True
+    else:
+        return False
