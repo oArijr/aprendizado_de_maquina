@@ -2,7 +2,6 @@ import math
 import numpy as np
 from scipy import stats
 import matplotlib.pyplot as plt
-from collections import Counter
 
 
 def dist(vetor_p, vetor_q):

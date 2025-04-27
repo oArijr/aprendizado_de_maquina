@@ -9,6 +9,15 @@ grupoTrain = mat['trainSet']
 testRots = mat['testLabs']
 trainRots = mat['trainLabs']
 
+Utils.visualizaPontos(grupoTrain, trainRots, 2, 0)
+Utils.visualizaPontos(grupoTest, testRots, 2, 0)
+
+Utils.visualizaPontos(grupoTrain, trainRots, 2, 1)
+Utils.visualizaPontos(grupoTest, testRots, 2, 1)
+
+Utils.visualizaPontos(grupoTrain, trainRots, 2, 3)
+Utils.visualizaPontos(grupoTest, testRots, 2, 3)
+
 
 # Q4.1: Aplique seu algoritmo K-NN ao problema. Qual é a sua acurácia de classificação?
 acuracia_maxima, k = Utils.acuracia_maxima(grupoTrain, trainRots, grupoTest, testRots)
@@ -52,3 +61,7 @@ for i in range(4):
     acuracia_maxima, k = Utils.acuracia_maxima(grupoTrainNormalizado_coluna, trainRots, grupoTestNormalizado_coluna, testRots)
 
     print(f"\nMantendo apenas a coluna: {i} \n Maior acurácia: {acuracia_maxima}; K = {k}")
+
+
+# Verificamos que a se for feito um KNN entre as colunas 2 e 3, não tem como realizar a classificação corretamente.
+# Logo, ao remover as características 2 e/ou 3, o algoritmo melhora drasticamente. O melhor resultado sendo ao remover apenas a coluna 2.
