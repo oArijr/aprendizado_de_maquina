@@ -19,6 +19,9 @@ val_min, val_max = Utils.normalizacao_fit(grupoTrain)
 grupoTrainNormalizado = Utils.normalizacao(grupoTrain, val_min, val_max)
 grupoTestNormalizado = Utils.normalizacao(grupoTest, val_min, val_max)
 
+grupoTrainNormalizado = np.array(grupoTrainNormalizado)
+grupoTestNormalizado = np.array(grupoTestNormalizado)
+
 acuracia_maxima, k = Utils.acuracia_maxima(grupoTrainNormalizado, trainRots, grupoTestNormalizado, testRots)
 print(f"Maior acurácia com todas as características normalizadas: {acuracia_maxima:.0f}%; K: {k}")
 

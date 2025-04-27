@@ -14,5 +14,6 @@ trainRots = mat['trainRots']
 knn1 = Utils.accuracy(grupoTrain, trainRots, grupoTest, testRots, 1)
 print(f"Acurácia para K=1 é de {knn1:.0f}%")
 
+
 acuracia_maxima, k = Utils.acuracia_maxima(grupoTrain, trainRots, grupoTest, testRots)
 print(f"Maior acurácia com todas as características: {acuracia_maxima:.0f}%; K: {k}")
