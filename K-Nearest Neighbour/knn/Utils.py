@@ -55,21 +55,11 @@ def getDadosRotulo(dados, rotulos, rotulo, indice):
 def visualizaPontos(dados, rotulos, d1, d2):
     fig, ax = plt.subplots()
 
-    cores = [
-        'red', 'blue', 'green', 'orange', 'purple',
-        'cyan', 'magenta', 'yellow', 'black', 'brown',
-        'pink', 'gray', 'lime'
-    ]
+    ax.scatter(getDadosRotulo(dados, rotulos, 1, d1), getDadosRotulo(dados, rotulos, 1, d2), c='red', marker='^')
 
-    markers = [
-        '^', '+', '.', 'o', 's',
-        'p', '*', 'h', 'D', 'v',
-        '>', '<', 'x'
-    ]
+    ax.scatter(getDadosRotulo(dados, rotulos, 2, d1), getDadosRotulo(dados, rotulos, 2, d2), c='blue', marker='+')
 
-    for i in range(1, len(set([valor[0] for valor in rotulos])) + 1):
-        ax.scatter(getDadosRotulo(dados, rotulos, i, d1), getDadosRotulo(dados, rotulos, i, d2), c=cores[i],
-                   marker=markers[i])
+    ax.scatter(getDadosRotulo(dados, rotulos, 3, d1), getDadosRotulo(dados, rotulos, 3, d2), c='green', marker='.')
 
     plt.show()
 

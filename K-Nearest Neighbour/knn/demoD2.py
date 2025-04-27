@@ -27,4 +27,7 @@ print(f"Maior acurácia com todas as características: {acuracia_maxima:.0f}%; K
 acuracia_maxima, k = Utils.acuracia_maxima(grupoTrainNormalizado, trainRots, grupoTestNormalizado, testRots)
 print(f"Maior acurácia com todas as características normalizadas: {acuracia_maxima:.0f}%; K: {k}")
 
+# R = Para a acurácia ser igual a 98% foi feito a normalização dos dados. Com a normalização dos dados os outliers,
+# que antes eram um problema agora deixam de ser. Para o K, foi feito uma busca onde era retornado o K com maior
+# acurácia diferente de 100% para evitar o overfitting.
 
