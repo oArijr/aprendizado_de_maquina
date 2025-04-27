@@ -11,7 +11,6 @@ def dist(vetor_p, vetor_q):
         total += np.pow(p - q, 2)
     return math.sqrt(total)
 
-
 def meu_knn(dadosTrain, rotuloTrain, dadosTeste, k):
     rotulos_previstos = []
 
@@ -29,17 +28,9 @@ def meu_knn(dadosTrain, rotuloTrain, dadosTeste, k):
         moda = stats.mode(mais_proximos_rotulados)
         rotulo_previsto = moda.mode
 
-        if k % 2 == 0:
-            if verificar_empate(mais_proximos_rotulados):
-                mais_proximos = list(dist_ordenada.keys())[:k-1]
-                mais_proximos_rotulados = [rotuloTrain[mp][0] for mp in mais_proximos]
-                moda = stats.mode(mais_proximos_rotulados)
-                rotulo_previsto = moda.mode
-
         # print(f"Moda teste {i}: ", rotulo_previsto)
         rotulos_previstos.append(rotulo_previsto)
     return rotulos_previstos
-
 
 def accuracy(dados_train, rotulos_train, dados_teste, rotulos_teste, k):
     rotulos_previstos = meu_knn(dados_train, rotulos_train, dados_teste, k)
@@ -52,8 +43,6 @@ def accuracy(dados_train, rotulos_train, dados_teste, rotulos_teste, k):
 
     return (numCorreto / totalNum) * 100
 
-
-
 def getDadosRotulo(dados, rotulos, rotulo, indice):
     ret = []
 
@@ -62,8 +51,6 @@ def getDadosRotulo(dados, rotulos, rotulo, indice):
             ret.append(dados[idx][indice])
 
     return ret
-
-
 
 def visualizaPontos(dados, rotulos, d1, d2):
     fig, ax = plt.subplots()
@@ -86,42 +73,33 @@ def visualizaPontos(dados, rotulos, d1, d2):
 
     plt.show()
 
-def normalizacao(dados):
+
+def normalizacao_fit(dados):
+    dados = np.array(dados)
+    min_vals = dados.min(axis=0)
+    max_vals = dados.max(axis=0)
+    return min_vals, max_vals
+
+def normalizacao(dados, min_value, max_value):
+    dados = np.array(dados)
     novos_dados = []
     for i in range(len(dados)):
         linha_nova = []
         for j in range(len(dados[i])):
             valor_atual = dados[i][j]
-            max_value = np.max(dados[:, j])
-            min_value = np.min(dados[:, j])
-            res = (valor_atual - min_value) / (max_value - min_value)
-
+            res = (valor_atual - min_value[j]) / (max_value[j] - min_value[j])
             linha_nova.append(res)
         novos_dados.append(linha_nova)
 
     return novos_dados
 
-
 def acuracia_maxima(dados_train, rotulos_train, dados_teste, rotulos_teste):
     acuracia_maxima = 0
     k = 0
-    for i in range(1, 50):
+    for i in range(1, 51):
         acuracia_atual = accuracy(dados_train, rotulos_train, dados_teste, rotulos_teste, i)
-        if acuracia_maxima < acuracia_atual:
+        if acuracia_atual != 100 and acuracia_atual > acuracia_maxima:
             acuracia_maxima = acuracia_atual
             k = i
 
     return acuracia_maxima, k
-
-
-
-
-def verificar_empate(vizinhos_rotulados):
-    contador = Counter(vizinhos_rotulados)
-    max_contagem = max(contador.values())
-    classes_empatadas = [classe for classe, cont in contador.items() if cont == max_contagem]
-
-    if len(classes_empatadas) > 1:
-        return True
-    else:
-        return False
