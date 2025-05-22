@@ -3,6 +3,7 @@ from apyori import apriori
 import utils
 
 limiar_suporte = 0.3
+fator_confianca = 0.8
 
 base_mercado = pd.read_csv('mercado.csv', header = None)
 print(base_mercado)
@@ -21,6 +22,17 @@ for item in itens_unicos:
         suportes.append((item, suposto_suporte))
 print(suportes)
 
+itens_validos = set(item for item, suporte in suportes)
+base_filtrada = base_mercado.where(base_mercado.isin(itens_validos))
 
+duplas_resultado = utils.combinacoes_duplas(base_filtrada)
 
-utils.combinacoes_duplas(base_mercado)
+trios_resultado = utils.combinacoes_trios(base_filtrada)
+
+dupla_confianca = utils.regras_calculo_duplas(duplas_resultado, suportes, fator_confianca)
+
+utils.exibir(duplas_resultado)
+
+utils.exibir(trios_resultado)
+
+utils.exibir(dupla_confianca)
