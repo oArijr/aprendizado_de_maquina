@@ -54,7 +54,14 @@ DICA: Veja o que é e como aplicar o Label Enconder em: https://youtu.be/nLKEkBA
 X_risco_credito = dataset_risco_credito.iloc[:, :-1].values
 y_risco_credito = dataset_risco_credito.iloc[:, -1].values
 
-# Apresente o resultado do LabelEncoder
+"""c) SALVAR O ARQUIVO PRÉ-PROCESSADO"""
+# Salvar o arquivo:
+import pickle
+with open('risco_credito.pkl', 'wb') as f:
+  pickle.dump([X_risco_credito, y_risco_credito], f)
+
+
+# Resultado do LabelEncoder
 from sklearn.preprocessing import LabelEncoder
 
 labelencoder = LabelEncoder()
@@ -66,12 +73,6 @@ y_risco_credito = labelencoder.fit_transform(y_risco_credito)
 print("\n\nY_risco_credito:\n", y_risco_credito)
 
 
-"""c) SALVAR O ARQUIVO PRÉ-PROCESSADO"""
-
-# como salvar o arquivo:
-import pickle
-with open('risco_credito.pkl', 'wb') as f:
-  pickle.dump([X_risco_credito, y_risco_credito], f)
 
 """# 2 - Algoritmo Naïve Bayes"""
 # importar da biblioteca sklearn o pacote Nayve Bayes
