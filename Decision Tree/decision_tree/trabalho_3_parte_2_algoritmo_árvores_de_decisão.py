@@ -133,13 +133,24 @@ print(f"Teste y= {y_credit_teste.shape}")
 
 """b) Importe o pacote DecisionTreeClassifier do sklearn para treinar o seu algoritmo de árvore de decisão. Para poder refazer os testes e obter o mesmo resultado utilize o parâmetro random_state = 0."""
 # Já está sendo importado
+arvore_credit = DecisionTreeClassifier(criterion='entropy', random_state=0)
+arvore_credit.fit(X_credit_treinamento, y_credit_treinamento)
 
 """c) Faça a previsão com os dados de teste. Visualize os dados e verifique se as previsões estão de acordo com os dados de teste (respostas reais)."""
+credit_test_predict = arvore_credit.predict(X_credit_teste)
 
+resultado_df = pd.DataFrame({
+    'Real': y_credit_teste,
+    'Previsto': credit_test_predict
+})
+
+print(resultado_df.head(20))
 
 """d) Agora faça o cálculo da acurácia para calcular a taxa de acerto entre os valores reais (y teste) e as previsões"""
+from sklearn.metrics import accuracy_score
+credit_accuracy = accuracy_score(y_credit_teste, credit_test_predict) * 100
 
-from sklearn.metrics import accuracy_score, classification_report
+print(f"Acurácia do credit: {credit_accuracy}%")
 
 """e) Faça a análise da Matriz de Confusão.
 
@@ -151,20 +162,52 @@ iii. Quantos clientes foram classificados corretamente que não pagam?
 
 iv. Quantos clientes foram classificados incorretamente como pagantes?
 """
+from sklearn.metrics import confusion_matrix
+matriz = confusion_matrix(y_credit_teste, credit_test_predict)
 
-from yellowbrick.classifier import ConfusionMatrix
-cm = ConfusionMatrix(arvore_credit)
-cm.fit(X_credit_treinamento, y_credit_treinamento)
-cm.score(X_credit_teste, y_credit_teste)
+print(matriz)
 
-"""f) Faça um print do parâmetro classification_report entre os dados de teste e as previsões. Explique qual é a relação entre precision e recall nos dados. Como você interpreta esses dados?
+# i. Foram classificados 430
+# ii. Foram classificados 6
+# iii. Foram classificados 61
+# iv. Foram classificados 3
 
-g) Gere uma visualização da sua árvore de decisão utilizando o pacote tree da biblioteca do sklearn.
+"""f) Faça um print do parâmetro classification_report entre os dados de teste e as previsões. Explique qual é a relação entre precision e recall nos dados. Como você interpreta esses dados? """
+from sklearn.metrics import classification_report
+
+print(classification_report(y_credit_teste, credit_test_predict))
+
+# Uma precision alta indica que o modelo cometeu poucos falsos positivos, ou seja,
+# quando prevê que o cliente pagará a dívida, essa previsão geralmente está correta.
+# Já um recall alto significa que o modelo cometeu poucos falsos negativos,
+# ou seja, conseguiu identificar a maioria dos clientes que realmente pagam.
+# No caso da classe 0 (pagantes), o modelo apresentou alta precisão,
+# demonstrando boa capacidade de evitar classificar indevidamente como pagante
+# alguém que na verdade não pagaria.
+
+"""g) Gere uma visualização da sua árvore de decisão utilizando o pacote tree da biblioteca do sklearn.
 
 OBS 1: Os atributos previsores são = ['income', 'age', 'loan']
 
-OBS 2: Adicione cores, nomes para os atributos e para as classes. Você pode utilizar a função fig.savefig para salvar a árvore em uma imagem .png
+OBS 2: Adicione cores, nomes para os atributos e para as classes. Você pode utilizar a função fig.savefig para salvar a árvore em uma imagem .png 
+"""
+atributos = ['income', 'age', 'loan']
+classes = ['pagam', 'não pagam']
 
+plt.figure(figsize=(40, 20))
+tree.plot_tree(
+    arvore_credit,
+    feature_names=atributos,
+    class_names=classes,
+    filled=True,
+    proportion=True,
+    rounded=True,
+    fontsize=12
+)
+plt.savefig("arvore_credito.png", dpi=300)
+plt.show()
+
+"""
 # Algoritmo Random Forest
 
 Nesta seção iremos utilizar o algoritmo Random Forest para a mesma base de crédito (**Credit Risk Dataset**) - arquivo *credit.pkl*.
