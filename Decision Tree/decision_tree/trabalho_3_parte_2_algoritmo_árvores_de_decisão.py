@@ -16,29 +16,18 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 import plotly.express as px
+from sklearn.preprocessing import LabelEncoder
 
 """# 1 - Importação dos dados Pré-Processados
 
 a) importe o arquivo salvo como 'risco_credito.pkl'
 """
-
 import pickle
 with open('risco_credito.pkl', 'rb') as f:
   X_risco_credito, y_risco_credito = pickle.load(f)
 
 atributos = ["História do Crédito", "Dívida", "Garantias", "Renda Anual"]
 X_risco_credito = pd.DataFrame(X_risco_credito, columns=atributos)
-
-"""# 2 - Algoritmo de Árvore de Decisão"""
-
-""" a) importar da biblioteca sklearn o pacote DecisionTreeClassifier"""
-from sklearn.tree import DecisionTreeClassifier
-
-"""
- b) Calcule a árvore de decisão, utilizando como critério a entropia.
- Coloque como nome da variável: arvore_risco_credito
-"""
-from sklearn.preprocessing import LabelEncoder
 
 x_encoded = X_risco_credito.copy()
 label_encoders = {}
@@ -51,6 +40,15 @@ for col in x_encoded.columns:
 le_y = LabelEncoder()
 y_encoded = le_y.fit_transform(y_risco_credito)
 
+print("_" * 80)
+"""# 2 - Algoritmo de Árvore de Decisão"""
+
+""" a) importar da biblioteca sklearn o pacote DecisionTreeClassifier"""
+from sklearn.tree import DecisionTreeClassifier
+"""
+ b) Calcule a árvore de decisão, utilizando como critério a entropia.
+ Coloque como nome da variável: arvore_risco_credito
+"""
 arvore_risco_credito = DecisionTreeClassifier(criterion='entropy')
 arvore_risco_credito.fit(x_encoded, y_encoded)
 
@@ -62,60 +60,84 @@ for nome, importancia in zip(arvore_risco_credito.feature_names_in_, feature_imp
 
 # R: O atributo com maior ganho de informação é a Renda Atual
 
-"""d) Gere uma visualização da sua árvore de decisão utilizando o pacote tree da biblioteca do sklearn.
+"""
+d) Gere uma visualização da sua árvore de decisão utilizando o pacote tree da biblioteca do sklearn.
 OBS: Adicione cores, nomes para os atributos e para as classes.
 """
-print("Antes: ",arvore_risco_credito.classes_)
-arvore_risco_credito.classes_ = le_y.inverse_transform(arvore_risco_credito.predict(x_encoded))
-print("Depois:", arvore_risco_credito.classes_)
-print(arvore_risco_credito.feature_importances_)
-
 from sklearn import tree
 
-plt.figure(figsize=(12, 8))
+plt.figure(figsize=(16, 9))
 tree.plot_tree(
     arvore_risco_credito,
     feature_names=arvore_risco_credito.feature_names_in_,
-    class_names=arvore_risco_credito.classes_,
+    class_names=le_y.classes_,
     filled=True,
+    proportion=True,
     fontsize=12
 )
 plt.show()
 
+"""
+e) FAZER A PREVISÃO
 
-# e) FAZER A PREVISÃO
+Utilize .predict para fazer a previsão realizada no exemplo em sala.
 
-# Utilize .predict para fazer a previsão realizada no exemplo em sala.
+i. história boa, dívida alta, garantia nenhuma, renda > 35
 
-#    i. história boa, dívida alta, garantia nenhuma, renda > 35
-#
-#    ii. história ruim, dívida alta, garantia adequada, renda < 15
-# Verifique nos slides se seu resultado está correto!
-
-
-
-
-
-
-"""# #3 - Algoritmo de Árvore de Decisão para uma base de dados maior (Credit Data)
-
-Nesta seção você deverá testar o uso da Árvore de Decisão para a Base de Dados Credit Risk Dataset. Aqui estaremos analisando os clientes que pagam (classe 0) ou não pagam a dívida (classe 1), a fim do banco conceder empréstimo.
+ii. história ruim, dívida alta, garantia adequada, renda < 15
+Verifique nos slides se seu resultado está correto!
 """
 
+exemplo_1 = [
+    label_encoders['História do Crédito'].transform(['boa'])[0],
+    label_encoders['Dívida'].transform(['alta'])[0],
+    label_encoders['Garantias'].transform(['nenhuma'])[0],
+    label_encoders['Renda Anual'].transform(['acima_35'])[0]
+]
+
+exemplo_2 = [
+    label_encoders['História do Crédito'].transform(['ruim'])[0],
+    label_encoders['Dívida'].transform(['alta'])[0],
+    label_encoders['Garantias'].transform(['adequada'])[0],
+    label_encoders['Renda Anual'].transform(['0_15'])[0]
+]
+
+exemplos = [exemplo_1, exemplo_2]
+
+previsoes = le_y.inverse_transform(arvore_risco_credito.predict(exemplos))
+
+for i, previsao in enumerate(previsoes, start=1):
+    print(f"Exemplo {i}: {previsao}")
+
+# Resultado do slide: Exemplo 1 = Baixo, Exemplo 2 = Alto
+
+print("_" * 80)
+"""
+#3 - Algoritmo de Árvore de Decisão para uma base de dados maior (Credit Data)
+
+Nesta seção você deverá testar o uso da Árvore de Decisão para a Base de Dados Credit Risk Dataset. 
+Aqui estaremos analisando os clientes que pagam (classe 0) ou não pagam a dívida (classe 1), a fim do banco conceder empréstimo.
+"""
 # abrir o arquivo
 with open('credit.pkl', 'rb') as f:
   X_credit_treinamento, y_credit_treinamento, X_credit_teste, y_credit_teste = pickle.load(f)
 
 """a) Ao abrir o arquivo utilize .shape para verificar o tamanho dos dados de treinamento e de teste
 
-OBS: os dados de treinamento devem ter as seguintes dimenções: x=(1500, 3), y=(1500,); os dados de teste devem ter as seguintes dimenções: x=(500, 3), y=(500,)
+OBS: os dados de treinamento devem ter as seguintes dimenções: x=(1500, 3), y=(1500,); os dados de teste devem ter as seguintes dimenções: x=(500, 3), y=(500,)"""
 
-b) Importe o pacote DecisionTreeClassifier do sklearn para treinar o seu algoritmo de árvore de decisão. Para poder refazer os testes e obter o mesmo resultado utilize o parâmetro random_state = 0.
+print(f"Treinamento X= {X_credit_treinamento.shape}")
+print(f"Treinamento y= {y_credit_treinamento.shape}")
+print(f"Teste X= {X_credit_teste.shape}")
+print(f"Teste y= {y_credit_teste.shape}")
 
-c) Faça a previsão com os dados de teste. Visualize os dados e verifique se as previsões estão de acordo com os dados de teste (respostas reais).
+"""b) Importe o pacote DecisionTreeClassifier do sklearn para treinar o seu algoritmo de árvore de decisão. Para poder refazer os testes e obter o mesmo resultado utilize o parâmetro random_state = 0."""
+# Já está sendo importado
 
-d) Agora faça o cálculo da acurácia para calcular a taxa de acerto entre os valores reais (y teste) e as previsões
-"""
+"""c) Faça a previsão com os dados de teste. Visualize os dados e verifique se as previsões estão de acordo com os dados de teste (respostas reais)."""
+
+
+"""d) Agora faça o cálculo da acurácia para calcular a taxa de acerto entre os valores reais (y teste) e as previsões"""
 
 from sklearn.metrics import accuracy_score, classification_report
 
