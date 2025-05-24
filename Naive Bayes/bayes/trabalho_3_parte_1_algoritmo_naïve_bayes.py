@@ -22,8 +22,10 @@ def set_label(classe):
     return "Alto"
   elif classe == 1:
     return "Baixo"
-  else:
+  elif classe == 2:
     return "Moderado"
+  else:
+    raise Exception("Classe invalida")
 
 # importe a base de dados de risco de crédito e nomeie com: dataset_risco_credito
 dataset_risco_credito = pd.read_csv('dataset_risco_credito.csv', encoding='utf-8')
@@ -109,7 +111,10 @@ print(df_resultado)
 
 
 # utilize .class_count_ para contar quantos registros tem em cada classe
-print("\n\nClass count:\n", naiveb_risco_credito.class_count_)
+class_count = naiveb_risco_credito.class_count_
+print("\n\nClass count REAL:")
+for i in range(len(class_count)):
+  print(set_label(i), "=", class_count[i])
 
 
 
