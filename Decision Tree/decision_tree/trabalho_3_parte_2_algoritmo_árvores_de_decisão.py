@@ -20,39 +20,84 @@ import plotly.express as px
 """# 1 - Importação dos dados Pré-Processados
 
 a) importe o arquivo salvo como 'risco_credito.pkl'
-
-
 """
 
 import pickle
 with open('risco_credito.pkl', 'rb') as f:
   X_risco_credito, y_risco_credito = pickle.load(f)
 
-"""# 2 - Algoritmo de Árvore de Decisão
+atributos = ["História do Crédito", "Dívida", "Garantias", "Renda Anual"]
+X_risco_credito = pd.DataFrame(X_risco_credito, columns=atributos)
 
-a) importar da biblioteca sklearn o pacote DecisionTreeClassifier
+"""# 2 - Algoritmo de Árvore de Decisão"""
 
-b) Calcule a árvore de decisão, utilizando como critério a entropia.
-Coloque como nome da variável: arvore_risco_credito
+""" a) importar da biblioteca sklearn o pacote DecisionTreeClassifier"""
+from sklearn.tree import DecisionTreeClassifier
 
-c) Utilize o feature_importances_ para retornar a importância de cada atributo. Qual possui o maior ganho de informação?
+"""
+ b) Calcule a árvore de decisão, utilizando como critério a entropia.
+ Coloque como nome da variável: arvore_risco_credito
+"""
+from sklearn.preprocessing import LabelEncoder
 
-d) Gere uma visualização da sua árvore de decisão utilizando o pacote tree da biblioteca do sklearn.
+x_encoded = X_risco_credito.copy()
+label_encoders = {}
 
+for col in x_encoded.columns:
+    le = LabelEncoder()
+    x_encoded[col] = le.fit_transform(x_encoded[col])
+    label_encoders[col] = le
+
+le_y = LabelEncoder()
+y_encoded = le_y.fit_transform(y_risco_credito)
+
+arvore_risco_credito = DecisionTreeClassifier(criterion='entropy')
+arvore_risco_credito.fit(x_encoded, y_encoded)
+
+"""c) Utilize o feature_importances_ para retornar a importância de cada atributo. Qual possui o maior ganho de informação?"""
+feature_importances = arvore_risco_credito.feature_importances_
+
+for nome, importancia in zip(arvore_risco_credito.feature_names_in_, feature_importances):
+    print(f"{nome}: {importancia}")
+
+# R: O atributo com maior ganho de informação é a Renda Atual
+
+"""d) Gere uma visualização da sua árvore de decisão utilizando o pacote tree da biblioteca do sklearn.
 OBS: Adicione cores, nomes para os atributos e para as classes.
+"""
+print("Antes: ",arvore_risco_credito.classes_)
+arvore_risco_credito.classes_ = le_y.inverse_transform(arvore_risco_credito.predict(x_encoded))
+print("Depois:", arvore_risco_credito.classes_)
+print(arvore_risco_credito.feature_importances_)
 
-e) FAZER A PREVISÃO
+from sklearn import tree
 
-Utilize .predict para fazer a previsão realizada no exemplo em sala.
+plt.figure(figsize=(12, 8))
+tree.plot_tree(
+    arvore_risco_credito,
+    feature_names=arvore_risco_credito.feature_names_in_,
+    class_names=arvore_risco_credito.classes_,
+    filled=True,
+    fontsize=12
+)
+plt.show()
 
-   i. história boa, dívida alta, garantia nenhuma, renda > 35
 
-   ii. história ruim, dívida alta, garantia adequada, renda < 15
+# e) FAZER A PREVISÃO
+
+# Utilize .predict para fazer a previsão realizada no exemplo em sala.
+
+#    i. história boa, dívida alta, garantia nenhuma, renda > 35
+#
+#    ii. história ruim, dívida alta, garantia adequada, renda < 15
+# Verifique nos slides se seu resultado está correto!
 
 
-Verifique nos slides se seu resultado está correto!
 
-#3 - Algoritmo de Árvore de Decisão para uma base de dados maior (Credit Data)
+
+
+
+"""# #3 - Algoritmo de Árvore de Decisão para uma base de dados maior (Credit Data)
 
 Nesta seção você deverá testar o uso da Árvore de Decisão para a Base de Dados Credit Risk Dataset. Aqui estaremos analisando os clientes que pagam (classe 0) ou não pagam a dívida (classe 1), a fim do banco conceder empréstimo.
 """
