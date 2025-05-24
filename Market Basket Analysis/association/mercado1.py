@@ -1,3 +1,5 @@
+# Luigi Marchetti e Ari Elias
+
 import pandas as pd
 from apyori import apriori
 import utils
