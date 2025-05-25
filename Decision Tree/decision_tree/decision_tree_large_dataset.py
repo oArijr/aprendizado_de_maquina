@@ -39,10 +39,18 @@ resultado_df = pd.DataFrame({
 print(resultado_df.head(20))
 
 """d) Agora faça o cálculo da acurácia para calcular a taxa de acerto entre os valores reais (y teste) e as previsões"""
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, precision_score, recall_score
 credit_accuracy = accuracy_score(y_credit_teste, credit_test_predict) * 100
 
-print(f"Acurácia do credit: {credit_accuracy}%")
+print(f"\nAcurácia do credit: {credit_accuracy}%")
+
+# Precisão
+precisao = precision_score(y_credit_teste, credit_test_predict, average='macro')
+print(f"\nPrecisão: {precisao * 100:.2f}%")
+
+# Recall
+recall = recall_score(y_credit_teste, credit_test_predict, average='macro')
+print(f"\nRecall: {recall * 100:.2f}%")
 
 """e) Faça a análise da Matriz de Confusão.
 
@@ -56,26 +64,33 @@ iv. Quantos clientes foram classificados incorretamente como pagantes?
 """
 from sklearn.metrics import confusion_matrix
 matriz = confusion_matrix(y_credit_teste, credit_test_predict)
-
-print(matriz)
+df_matriz = pd.DataFrame(
+    matriz,
+    index=["Real 0", "Real 1"],
+    columns=["Previsto 0", "Previsto 1"]
+)
+print("\nMatriz de Confusão:")
+print(df_matriz.to_string(), "\n\n")
 
 # i. Foram classificados 430 corretamente como risco alto
-# ii. Foram classificados 6 incorretamente como risco alto
+# ii. Foram classificados 6 incorretamente como risco baixo
 # iii. Foram classificados 61 corretamente como risco baixo.
-# iv. Foram classificados 3 incorretamente como risco baixo.
+# iv. Foram classificados 3 incorretamente como risco alto.
 
 """f) Faça um print do parâmetro classification_report entre os dados de teste e as previsões. Explique qual é a relação entre precision e recall nos dados. Como você interpreta esses dados? """
 from sklearn.metrics import classification_report
 
 print(classification_report(y_credit_teste, credit_test_predict))
 
-# Uma precision alta indica que o modelo cometeu poucos falsos positivos, ou seja,
-# quando prevê que o cliente pagará a dívida, essa previsão geralmente está correta.
-# Já um recall alto significa que o modelo cometeu poucos falsos negativos,
-# ou seja, conseguiu identificar a maioria dos clientes que realmente pagam.
-# No caso da classe 0 (pagantes), o modelo apresentou alta precisão,
-# demonstrando boa capacidade de evitar classificar indevidamente como pagante
-# alguém que na verdade não pagaria.
+# Precision indica a proporção de previsões positivas que estavam corretas. No caso da classe 0 (risco alto) a precisão foi de 0.99,
+# o que quer dizer que 99% dos clientes previstos como classe 0 (risco alto) realmente são classe 0 (risco alto) e para a classe 1 (risco baixo),
+# a precisão foi de 0.91, ou seja, 91% dos clientes previstos como classe 1 (risco baixo) realmente são classe 1 (risco  baixo).
+
+# Recall mostra a proporção de casos positivos reais que foram corretamente identificados pelo modelo.
+# Para a classe 0 (risco alto), o recall foi de 0.99, indicando que 99% dos classes 0 foram corretamente detectados.
+# Para a classe 1 (risco baixo), o recall foi de 0.95, o que significa que 95% dos classes 1 foram corretamente detectados.
+
+# Aqui vimos que o algoritmo está com uma tendência maior a classificar os clientes como risco baixo.
 
 """g) Gere uma visualização da sua árvore de decisão utilizando o pacote tree da biblioteca do sklearn.
 

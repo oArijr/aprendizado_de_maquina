@@ -4,7 +4,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import plotly.express as px
 import pickle
-from sklearn.metrics import accuracy_score, confusion_matrix, precision_score, recall_score
+from sklearn.metrics import accuracy_score, confusion_matrix, precision_score, recall_score, classification_report
 
 
 
@@ -27,6 +27,14 @@ previsoes = modelo.predict(X_teste)
 acuracia = accuracy_score(y_teste, previsoes)
 print(f"Taxa de acerto (acurácia): {acuracia * 100:.2f}%")
 
+# Precisão
+precisao = precision_score(y_teste, previsoes, average='macro')
+print(f"\nPrecisão: {precisao * 100:.2f}%")
+
+# Recall
+recall = recall_score(y_teste, previsoes, average='macro')
+print(f"\nRecall: {recall * 100:.2f}%")
+
 # Matriz de confusão
 matriz = confusion_matrix(y_teste, previsoes)
 df_matriz = pd.DataFrame(
@@ -37,10 +45,5 @@ df_matriz = pd.DataFrame(
 print("\nMatriz de Confusão:")
 print(df_matriz.to_string())
 
-# Precisão
-precisao = precision_score(y_teste, previsoes, average='macro')
-print(f"\nPrecisão: {precisao * 100:.2f}%")
-
-# Recall
-recall = recall_score(y_teste, previsoes, average='macro')
-print(f"\nRecall: {recall * 100:.2f}%")
+print("\nRelatório de classificação:")
+print(classification_report(y_teste, previsoes))
