@@ -9,7 +9,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import plotly.express as px
 from sklearn.preprocessing import LabelEncoder
-from sklearn.metrics import accuracy_score, classification_report
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix, precision_score, recall_score
 from sklearn.svm import SVC
 import pickle
 from sklearn.model_selection import GridSearchCV
@@ -95,6 +95,23 @@ previsoes_grid = melhor_modelo.predict(X_teste)
 acuracia_grid = accuracy_score(y_teste, previsoes_grid)
 print(f"Modelo com Grid Search - acurácia: {acuracia_grid*100:.2f}%")
 
+# Precisão
+precisao = precision_score(y_teste, previsoes, average='macro')
+print(f"\nPrecisão: {precisao * 100:.2f}%")
+
+# Recall
+recall = recall_score(y_teste, previsoes, average='macro')
+print(f"\nRecall: {recall * 100:.2f}%")
+
+matriz = confusion_matrix(y_teste, previsoes)
+df_matriz = pd.DataFrame(
+    matriz,
+    index=["Real 0", "Real 1"],
+    columns=["Previsto 0", "Previsto 1"]
+)
+print("\nMatriz de Confusão:")
+print(df_matriz.to_string())
+
 print("\nRelatório de classificação do melhor modelo:")
 print(classification_report(y_teste, previsoes_grid))
 
@@ -104,11 +121,17 @@ print(classification_report(y_teste, previsoes_grid))
 
 # Análise dos resultados dos 4 algoritmos utilizados:
 
-6. O resultado do SVM é melhor que os resultados do Naive Bayes, Florestas Aleatórias e Regressão Logística? Descreva sua análise de resultados (observe que para isso você deverá visualizar os resultados da Matriz de Confusão, acurácia, precisão e recall).
+6. O resultado do SVM é melhor que os resultados do Naive Bayes, Florestas Aleatórias e Regressão Logística? Descreva sua análise de resultados 
+(observe que para isso você deverá visualizar os resultados da Matriz de Confusão, acurácia, precisão e recall).
 """
 
 """"
-R: 
+R:  O rótulo 0 representa um empréstimo de risco ALTO e o 1 representa um empréstimo de risco BAIXO.
+    Neste cenário, nosso objetivo é minimizar os falsos positivos, ou seja, evitar que empréstimos de risco ALTO sejam classificados como BAIXO.
 
+    Os dois melhores modelos foram SVM e Random Forest. 
+    O SVM foi o melhor com apenas 1 falso positivo e acurácia de 99%, enquanto o Random Forest teve 3 falsos positivos e acurácia de 98%.
+
+    A análise priorizou a precisão da classe 0 (risco ALTO). O recall da classe 1 foi considerado secundário e pode ser sacrificado para garantir maior segurança na decisão.
 """
 

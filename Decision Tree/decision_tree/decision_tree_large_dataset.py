@@ -39,10 +39,18 @@ resultado_df = pd.DataFrame({
 print(resultado_df.head(20))
 
 """d) Agora faça o cálculo da acurácia para calcular a taxa de acerto entre os valores reais (y teste) e as previsões"""
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, precision_score, recall_score
 credit_accuracy = accuracy_score(y_credit_teste, credit_test_predict) * 100
 
-print(f"Acurácia do credit: {credit_accuracy}%")
+print(f"\nAcurácia do credit: {credit_accuracy}%")
+
+# Precisão
+precisao = precision_score(y_credit_teste, credit_test_predict, average='macro')
+print(f"\nPrecisão: {precisao * 100:.2f}%")
+
+# Recall
+recall = recall_score(y_credit_teste, credit_test_predict, average='macro')
+print(f"\nRecall: {recall * 100:.2f}%")
 
 """e) Faça a análise da Matriz de Confusão.
 
@@ -56,8 +64,13 @@ iv. Quantos clientes foram classificados incorretamente como pagantes?
 """
 from sklearn.metrics import confusion_matrix
 matriz = confusion_matrix(y_credit_teste, credit_test_predict)
-
-print(matriz)
+df_matriz = pd.DataFrame(
+    matriz,
+    index=["Real 0", "Real 1"],
+    columns=["Previsto 0", "Previsto 1"]
+)
+print("\nMatriz de Confusão:")
+print(df_matriz.to_string(), "\n\n")
 
 # i. Foram classificados 430
 # ii. Foram classificados 6
