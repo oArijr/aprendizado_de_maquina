@@ -75,24 +75,24 @@ f) Faça a análise da Matriz de Confusão.
 matriz_floresta = confusion_matrix(y_credit_teste, floresta_predict_novo)
 print(matriz_floresta)
 
-# 433 classificados corretamente como pagantes.
-# 3 classificados incorretamente como pagantes.
-# 6 classificados incorretamente como não-pagantes.
-# 58 classificados corretamente como não-pagantes.
-# O modelo apresentou uma excelente taxa de acerto. O modelo apresentou uma leve tendência a classificar os clientes como pagantes,
-# o que pode indicar uma preferência por evitar falsos negativos (deixar de conceder crédito a quem pagaria).
+# 433 classificados corretamente como alto.
+# 3 classificados incorretamente como alto.
+# 6 classificados incorretamente como baixo.
+# 58 classificados corretamente como baixo.
+
+# O modelo apresentou uma excelente taxa de acerto. Porem o modelo apresentou uma leve tendência a classificar os clientes com um risco alto.
 
 """
 g) Faça um print do parâmetro classification_report entre os dados de teste e as previsões. Explique qual é a relação entre precision e recall nos dados. Como você interpreta esses dados?
 """
 print(classification_report(y_credit_teste, floresta_predict_novo))
 
-#   Precision indica a proporção de previsões positivas que estavam corretas. No caso da classe 0 (pagantes) a precisão foi de 99%
-#   o que quer dizer que 99% dos clientes previstos como pagantes realmente pagam suas dividas e para a classe 1 (inadimplentes),
-#   a precisão foi de 0.95, ou seja, 95% dos clientes previstos como inadimplentes realmente não pagam a dívida.
+#   Precision indica a proporção de previsões positivas que estavam corretas. No caso da classe 0 (risco alto) a precisão foi de 0.99,
+#   o que quer dizer que 99% dos clientes previstos como classe 0 (risco alto) realmente são classe 0 (risco alto) e para a classe 1 (risco baixo),
+#   a precisão foi de 0.91, ou seja, 91% dos clientes previstos como classe 1 (risco baixo) realmente são classe 1 (risco  baixo).
 
 #   Recall mostra a proporção de casos positivos reais que foram corretamente identificados pelo modelo.
-#   Para a classe 0, o recall foi de 99%, indicando que 99% dos pagantes reais foram corretamente detectados.
-#   Para a classe 1, o recall foi de 0.91, o que significa que 91% dos inadimplentes reais foram corretamente detectados.
+#   Para a classe 0 (risco alto), o recall foi de 0.99, indicando que 99% dos classes 0 foram corretamente detectados.
+#   Para a classe 1 (risco baixo), o recall foi de 0.95, o que significa que 95% dos classes 1 foram corretamente detectados.
 
-#   Como falei na resposta anterior, o modelo apresentou uma leve tendencia a classificar os inadimplentes como pagantes.
+#   Como falei na resposta anterior, o modelo apresentou uma leve tendencia a classificar como risco alto.

@@ -59,10 +59,10 @@ matriz = confusion_matrix(y_credit_teste, credit_test_predict)
 
 print(matriz)
 
-# i. Foram classificados 430
-# ii. Foram classificados 6
-# iii. Foram classificados 61
-# iv. Foram classificados 3
+# i. Foram classificados 430 corretamente como risco alto
+# ii. Foram classificados 6 incorretamente como risco alto
+# iii. Foram classificados 61 corretamente como risco baixo.
+# iv. Foram classificados 3 incorretamente como risco baixo.
 
 """f) Faça um print do parâmetro classification_report entre os dados de teste e as previsões. Explique qual é a relação entre precision e recall nos dados. Como você interpreta esses dados? """
 from sklearn.metrics import classification_report
