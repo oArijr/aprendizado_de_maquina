@@ -1,0 +1,98 @@
+
+"""
+# Algoritmo Random Forest
+
+Nesta seção iremos utilizar o algoritmo Random Forest para a mesma base de crédito (**Credit Risk Dataset**) - arquivo *credit.pkl*.
+
+a) Importe o pacote RandomForestClassifier do sklearn para treinar o seu algoritmo de floresta randomica.
+"""
+import pandas as pd
+import matplotlib.pyplot as plt
+import pickle
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import confusion_matrix
+from sklearn.metrics import classification_report
+
+with open('credit.pkl', 'rb') as f:
+  X_credit_treinamento, y_credit_treinamento, X_credit_teste, y_credit_teste = pickle.load(f)
+
+from sklearn.ensemble import RandomForestClassifier
+
+"""
+b) Para gerar a classificação você deve adicionar alguns parâmetros:
+*   n_estimators=10  --> número de árvores que você irá criar
+*   criterion='entropy'
+*   random_state = 0
+"""
+floresta_credit = RandomForestClassifier(
+    n_estimators=10,
+    criterion='entropy',
+    random_state=0
+)
+
+floresta_credit.fit(X_credit_treinamento, y_credit_treinamento)
+
+"""
+c) Faça a previsão com os dados de teste. Visualize os dados e verifique se as previsões estão de acordo com os dados de teste (respostas reais).
+"""
+floresta_predict = floresta_credit.predict(X_credit_teste)
+
+resultado_fp = pd.DataFrame({
+    'Real': y_credit_teste,
+    'Previsto': floresta_predict
+})
+
+print(resultado_fp.head(20))
+
+"""
+d) Agora faça o cálculo da acurácia para calcular a taxa de acerto entre os valores reais (y teste) e as previsões. O resultado foi melhor do que a árvore de decisão simples?
+"""
+floresta_accuracy = accuracy_score(y_credit_teste, floresta_predict) * 100
+print(f"Acurácia do modelo Random Forest: {floresta_accuracy}%")
+
+# Não, o resultado da árvore simples foi de 98.2% já utilizando a floresta a acuracia chegou a 96.8%.
+
+"""
+e) Se o resultado foi inferior, como você poderia resolver isso? Quais foram os resultados obtidos?
+"""
+floresta_credit_novo = RandomForestClassifier(
+    n_estimators=100,
+    criterion='entropy',
+    random_state=0
+)
+
+floresta_credit_novo.fit(X_credit_treinamento, y_credit_treinamento)
+
+floresta_predict_novo = floresta_credit_novo.predict(X_credit_teste)
+
+floresta_accuracy_novo = accuracy_score(y_credit_teste, floresta_predict_novo) * 100
+print(f"Nova Acurácia do modelo Random Forest: {floresta_accuracy_novo}%")
+
+# Aumentei a quantidade de árvores para 100 e o resultado igualou a acuracia entre a floresta e uma única árvore, ambas com 98.2% de acurácia.
+"""
+f) Faça a análise da Matriz de Confusão.
+"""
+matriz_floresta = confusion_matrix(y_credit_teste, floresta_predict_novo)
+print(matriz_floresta)
+
+# 433 classificados corretamente como pagantes.
+# 3 classificados incorretamente como pagantes.
+# 6 classificados incorretamente como não-pagantes.
+# 58 classificados corretamente como não-pagantes.
+# O modelo apresentou uma excelente taxa de acerto. O modelo apresentou uma leve tendência a classificar os clientes como pagantes,
+# o que pode indicar uma preferência por evitar falsos negativos (deixar de conceder crédito a quem pagaria).
+
+"""
+g) Faça um print do parâmetro classification_report entre os dados de teste e as previsões. Explique qual é a relação entre precision e recall nos dados. Como você interpreta esses dados?
+"""
+print(classification_report(y_credit_teste, floresta_predict_novo))
+
+#   Precision indica a proporção de previsões positivas que estavam corretas. No caso da classe 0 (pagantes) a precisão foi de 99%
+#   o que quer dizer que 99% dos clientes previstos como pagantes realmente pagam suas dividas e para a classe 1 (inadimplentes),
+#   a precisão foi de 0.95, ou seja, 95% dos clientes previstos como inadimplentes realmente não pagam a dívida.
+
+#   Recall mostra a proporção de casos positivos reais que foram corretamente identificados pelo modelo.
+#   Para a classe 0, o recall foi de 99%, indicando que 99% dos pagantes reais foram corretamente detectados.
+#   Para a classe 1, o recall foi de 0.91, o que significa que 91% dos inadimplentes reais foram corretamente detectados.
+
+#   Como falei na resposta anterior, o modelo apresentou uma leve tendencia a classificar os inadimplentes como pagantes.
