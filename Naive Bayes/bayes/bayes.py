@@ -10,6 +10,11 @@ Original file is located at
 
 Nesta primeira parte do Trabalho você irá aplicar o algoritmo de Naïve Bayes na base de dados de risco de crédito discutida em aula. Para isso você deve primeiramente importar as bibliotecas necessárias.
 """
+def print_title(title):
+  print(f"\n\n{'=' * 70}")
+  print(f"{title}:")
+  print(f"{'=' * 70}")
+
 
 import pandas as pd
 import numpy as np
@@ -17,20 +22,10 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import plotly.express as px
 
-def set_label(classe):
-  if classe == 0:
-    return "Alto"
-  elif classe == 1:
-    return "Baixo"
-  elif classe == 2:
-    return "Moderado"
-  else:
-    raise Exception("Classe invalida")
-
 # importe a base de dados de risco de crédito e nomeie com: dataset_risco_credito
 dataset_risco_credito = pd.read_csv('dataset_risco_credito.csv', encoding='utf-8')
 # imprima a base de dados para uma primeira avaliação dos dados
-print(dataset_risco_credito)
+#print(dataset_risco_credito)
 
 """# 1 - Pré-Processamento dos dados
 
@@ -64,14 +59,36 @@ with open('risco_credito.pkl', 'wb') as f:
 # Resultado do LabelEncoder
 from sklearn.preprocessing import LabelEncoder
 
-labelencoder = LabelEncoder()
+le_y = LabelEncoder()
+y_risco_credito = le_y.fit_transform(y_risco_credito)
+
+le_x = {}
+colunas = dataset_risco_credito.columns[:-1] # ["historia", "divida", "garantias", "renda"]
+X_risco_credito = np.array(X_risco_credito)
 for i in range(X_risco_credito.shape[1]):
-  X_risco_credito[:, i] = labelencoder.fit_transform(X_risco_credito[:, i])
-print("\n\nX_risco_credito:\n", X_risco_credito)
+  le = LabelEncoder()
+  X_risco_credito[:, i] = le.fit_transform(X_risco_credito[:, i])
+  le_x[colunas[i]] = le
 
-y_risco_credito = labelencoder.fit_transform(y_risco_credito)
-print("\n\nY_risco_credito:\n", y_risco_credito)
 
+print_title("Dataset sem Label:")
+df = pd.DataFrame(X_risco_credito, columns=colunas)
+df['classe'] = [c for c in y_risco_credito]
+print(df.to_string(index=False))
+
+
+print_title("Dataset com Label:")
+x_decoded = []
+for i in range(len(y_risco_credito)):
+  linha_decoded = []
+  for j in range(len(X_risco_credito[i])):
+    value_decoded = le_x[colunas[j]].inverse_transform([X_risco_credito[i][j]])[0]
+    linha_decoded.append(value_decoded)
+  x_decoded.append(linha_decoded)
+
+df = pd.DataFrame(x_decoded, columns=colunas)
+df['classe'] = [le_y.inverse_transform([c])[0] for c in y_risco_credito]
+print(df)
 
 
 """# 2 - Algoritmo Naïve Bayes"""
@@ -102,28 +119,24 @@ Verifique nos slides se seu resultado está correto!
 """
 naiveb_risco_credito.fit(X_risco_credito, y_risco_credito)
 
+# i) história boa, dívida alta, garantias nenhuma, renda > 35
+entrada_a = ["boa", "alta", "nenhuma", "acima_35"]
+
+# ii) história ruim, dívida alta, garantias adequada, renda < 15
+entrada_b = ["ruim", "alta", "adequada", "0_15"]
+
 predict = naiveb_risco_credito.predict(X_risco_credito)
 
-print()
-df_resultado = pd.DataFrame(X_risco_credito, columns=dataset_risco_credito.columns[:-1])
-df_resultado['Classe Real'] = [set_label(c) for c in y_risco_credito]
-df_resultado['Previsão'] = [set_label(p) for p in predict]
-print(df_resultado)
+entrada_a_encoded = []
+entrada_b_encoded = []
+for i in range(4):
+  entrada_a_encoded.append(le_x[colunas[i]].transform([entrada_a[i]])[0])
+  entrada_b_encoded.append(le_x[colunas[i]].transform([entrada_b[i]])[0])
 
+# Previsão
+pred_a = naiveb_risco_credito.predict([entrada_a_encoded])
+pred_b = naiveb_risco_credito.predict([entrada_b_encoded])
 
-# utilize .class_count_ para contar quantos registros tem em cada classe
-class_count = naiveb_risco_credito.class_count_
-print("\n\nClass count REAL:")
-for i in range(len(class_count)):
-  print(set_label(i), "=", class_count[i])
-
-
-
-from sklearn.metrics import accuracy_score
-acuracia = accuracy_score(y_risco_credito, predict)
-
-# Cálculo da margem de erro
-margem_erro = 1 - acuracia
-
-print(f"\nAcurácia do modelo: {acuracia * 100:.2f}%")
-print(f"Margem de erro do modelo: {margem_erro * 100:.2f}%")
+print_title("Resultados das Previsões")
+print(f"a) Entrada: {entrada_a} => Classe prevista: {le_y.inverse_transform(pred_a)[0]} (esperado: baixo)")
+print(f"b) Entrada: {entrada_b} => Classe prevista: {le_y.inverse_transform(pred_b)[0]} (esperado: alto)")
