@@ -91,22 +91,22 @@ for i, coef in enumerate(outros_b[0]):
 
 
 
-# a) história boa, dívida alta, garantias nenhuma, renda > 35
-entrada_a = ["boa", "alta", "nenhuma", "acima_35"]
+# i) história boa, dívida alta, garantias nenhuma, renda > 35
+entrada_i = ["boa", "alta", "nenhuma", "acima_35"]
 
-# b) história ruim, dívida alta, garantias adequada, renda < 15
-entrada_b = ["ruim", "alta", "adequada", "0_15"]
+# ii) história ruim, dívida alta, garantias adequada, renda < 15
+entrada_ii = ["ruim", "alta", "adequada", "0_15"]
 
-entrada_a_encoded = []
-entrada_b_encoded = []
+entrada_i_encoded = []
+entrada_ii_encoded = []
 for i in range(4):
-    entrada_a_encoded.append(le_x[colunas[i]].transform([entrada_a[i]])[0])
-    entrada_b_encoded.append(le_x[colunas[i]].transform([entrada_b[i]])[0])
+    entrada_i_encoded.append(le_x[colunas[i]].transform([entrada_i[i]])[0])
+    entrada_ii_encoded.append(le_x[colunas[i]].transform([entrada_ii[i]])[0])
 
 # Previsão
-pred_a = modelo.predict([entrada_a_encoded])
-pred_b = modelo.predict([entrada_b_encoded])
+pred_i = modelo.predict([entrada_i_encoded])
+pred_ii = modelo.predict([entrada_ii_encoded])
 
 print_title("Resultados das Previsões")
-print(f"a) Entrada: {entrada_a} => Classe prevista: {le_y.inverse_transform(pred_a)[0]} (esperado: baixo)")
-print(f"b) Entrada: {entrada_b} => Classe prevista: {le_y.inverse_transform(pred_b)[0]} (esperado: alto)")
+print(f"Entrada I: {entrada_i} => Classe prevista: {le_y.inverse_transform(pred_i)[0]} (esperado: baixo)")
+print(f"Entrada II: {entrada_ii} => Classe prevista: {le_y.inverse_transform(pred_ii)[0]} (esperado: alto)")
