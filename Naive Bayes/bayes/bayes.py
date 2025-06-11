@@ -91,6 +91,8 @@ df['classe'] = [le_y.inverse_transform([c])[0] for c in y_risco_credito]
 print(df)
 
 
+
+# Plot Distribuição das Classes
 sns.countplot(x=le_y.inverse_transform(y_risco_credito))
 plt.title("Distribuição das Classes (Risco de Crédito)")
 plt.xlabel("Classe")
@@ -98,23 +100,18 @@ plt.ylabel("Quantidade")
 plt.show()
 
 
-
-# Supondo que 'X_risco_credito' seja um numpy array com dados codificados
+# Heatmap com seaborn
 df_encoded = pd.DataFrame(X_risco_credito, columns=colunas)
+df_encoded["classe"] = y_risco_credito
 
-# Adiciona a variável alvo codificada como numérica também
-df_encoded["classe"] = y_risco_credito  # <- aqui usa o y codificado, não o inverse_transform ainda
-
-# Agora sim, faz a matriz de correlação completa
 corr = df_encoded.corr()
-
-# Exibe o heatmap com seaborn
 plt.figure(figsize=(8, 6))
 sns.heatmap(corr, annot=True, cmap='coolwarm')
 plt.title("Correlação entre variáveis")
 plt.show()
 
 
+# Correlacao mais exata somente entre 2 classes
 df_plot = pd.DataFrame(x_decoded, columns=colunas)
 df_plot['classe'] = le_y.inverse_transform(y_risco_credito)
 
@@ -164,8 +161,6 @@ entrada_i = ["boa", "alta", "nenhuma", "acima_35"]
 # ii) história ruim, dívida alta, garantias adequada, renda < 15
 entrada_ii = ["ruim", "alta", "adequada", "0_15"]
 
-predict = naiveb_risco_credito.predict(X_risco_credito)
-
 entrada_i_encoded = []
 entrada_ii_encoded = []
 for i in range(4):
@@ -185,6 +180,7 @@ probs = naiveb_risco_credito.predict_proba([entrada_i_encoded, entrada_ii_encode
 df_probs = pd.DataFrame(probs, columns=le_y.classes_, index=["Entrada I", "Entrada II"])
 print("\n", df_probs)
 
+# Plot com as probabilidades
 df_probs.plot(kind='bar', figsize=(8, 4))
 plt.title("Probabilidades para cada classe")
 plt.ylabel("Probabilidade")
