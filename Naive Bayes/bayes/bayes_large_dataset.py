@@ -16,7 +16,7 @@ with open("credit.pkl", "rb") as f:
 # print(y_risco_credito[:20])
 
 
-from sklearn.naive_bayes import GaussianNB
+from sklearn.naive_bayes import GaussianNB, CategoricalNB, MultinomialNB
 modelo = GaussianNB()
 modelo.fit(X_risco_credito, y_risco_credito) # Treino
 

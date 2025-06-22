@@ -51,7 +51,7 @@ print(f"Melhor taxa de acerto manual (acurácia): {acuracia * 100:.2f}%\n\n\n")
 # sigmoid = 83.80%
 
 #5
-def discover_best_by_hand():
+def descobre_melhor_na_mao():
     C = 1.0
     acuracia_max = 0
     melhor_c = 1.0
@@ -71,7 +71,7 @@ def discover_best_by_hand():
         C+= 0.1
     print(acuracia_max)
     print(C)
-#discover_best_by_hand()
+#descobre_melhor_na_mao()
 
 #6
 # Definindo os hiperparâmetros para o GridSearch
